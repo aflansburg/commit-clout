@@ -1,0 +1,30 @@
+name: Commit Clout Generator
+on:
+  workflow_dispatch:
+
+jobs:
+  generate-commits:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+          token: ${{ secrets.PAT_ACCESS_TOKEN }}
+      
+      - name: Configure git
+        run: |
+          git config user.name "aflansburg"
+          git config user.email "abeflansburg@gmail.com"
+      
+      - name: Generate commits
+        run: |
+          for i in {1..5}; do
+            echo "$i" >> count.txt
+            git add count.txt
+            git commit -m "give me that clout $i"
+          done
+      
+      - name: Push changes
+        run: git push origin develop
